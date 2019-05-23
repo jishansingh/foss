@@ -12,21 +12,21 @@ class Reply(models.Model):
 class Question(models.Model):
     question=models.CharField(max_length=30)
     content=models.TextField()
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='by_user')
     category=models.CharField(choices=CHOICE,max_length=30)
-    likes=models.IntgerField(default=0)
-    visited=models.ManyToManyField(User,null=True)
+    likes=models.IntegerField(default=0)
+    visited=models.ManyToManyField(User,blank=True,related_name='visited_users')
     reply=models.ManyToManyField(Reply)
 
 class UserProfile(models.Model):
-    user=models.OneToOneField(User,related_name='user_profile')
+    user=models.OneToOneField(User,related_name='user_profile',on_delete=models.CASCADE)
     photo=models.ImageField()
     email=models.EmailField()
-    roll_no=models.CharField(max_length=20)
-    my_question=models.ManyToManyField(question,null=True,related_name='my_question')
-    dislike=models.ManyToManyField(question,null=True,related_name='dislike')
-    liked=models.ManyToManyField(question,null=True,related_name='liked')
-    visited=models.ManyToManyField(question,null=True,related_name='visited')
+    roll_no=models.CharField(max_length=20,default="")
+    my_question=models.ManyToManyField(Question,blank=True,related_name='asked_question')
+    dislike=models.ManyToManyField(Question,blank=True,related_name='disliked')
+    liked=models.ManyToManyField(Question,blank=True,related_name='liked_ques')
+    visited=models.ManyToManyField(Question,blank=True,related_name='visited_ques')
 
 
 

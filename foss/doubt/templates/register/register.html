@@ -1,0 +1,12 @@
+<html>
+<head>
+</head>
+<body>
+<form method="post" action="{% url 'register' %}" enctype=multipart/form-data>
+    {% csrf_token %}
+    {{form.as_p}}
+    {{profile_form.as_p}}
+    <input type="submit" value="login">
+</form>
+</body>
+</html>

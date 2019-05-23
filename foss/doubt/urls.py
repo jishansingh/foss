@@ -1,9 +1,9 @@
 from django.urls import path,include
 from . import views
-from django.contrib.auth.views import login,logout
+from django.contrib.auth.views import LoginView
 urlpatterns = [
     path('',views.index,name='index'),
-    path('login/',login,{'template_name':'login/login.html'},name='login'),
+    path('login/',LoginView.as_view(template_name='login/login.html'),name='login'),
     path('logout/',views.log_me_out,name='logout'),
     path('my-ques/',views.my_question,name='my_question'),
     path('question/<id>',views.Question.as_view(),name='question'),

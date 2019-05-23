@@ -1,4 +1,4 @@
-CHOICES=[
+CHOICE=[
     ('effervesence','efferversence'),
     ('studies','studies'),
 ]
