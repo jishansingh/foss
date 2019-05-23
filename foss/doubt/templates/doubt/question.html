@@ -1,0 +1,9 @@
+<html>
+<head>
+</head>
+<body>
+{% for quest in question %}
+    <h1><a href="{% url 'view_question' id=quest.id %}">{{quest.question}}</a></h1>
+{% endfor %}
+</body>
+</html>

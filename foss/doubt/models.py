@@ -16,7 +16,7 @@ class Question(models.Model):
     category=models.CharField(choices=CHOICE,max_length=30)
     likes=models.IntegerField(default=0)
     visited=models.ManyToManyField(User,blank=True,related_name='visited_users')
-    reply=models.ManyToManyField(Reply)
+    reply=models.ManyToManyField(Reply,blank=True)
 
 class UserProfile(models.Model):
     user=models.OneToOneField(User,related_name='user_profile',on_delete=models.CASCADE)

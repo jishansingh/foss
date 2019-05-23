@@ -3,7 +3,7 @@ from .models import Question,Reply,UserProfile
 from .forms import ReplyForm
 from django.views import View
 from django.views.generic import TemplateView
-from .forms import ReplyForm,ProfileForm
+from .forms import ReplyForm,ProfileForm,AskQuestion
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
 
@@ -20,16 +20,33 @@ def my_question(request):
 def log_me_out(request):
         logout(request)
         return redirect('login')
-class Question(View):
-        def get(self,request,id):
-                template_name='doubt/all_question.html'
-                question=Question.objects.all().filter()
+class ask_question(View):
+        def get(self,request):
+                form=AskQuestion()
+                context={'form':form,}
+                return render(request,'doubt/ask_question.html',context)
+        def post(self,request):
+                if request.user.is_authenticated:
+                        form=AskQuestion(request.POST)
+                        if form.is_valid():
+                                form=form.save(commit=False)
+                                ques=form
+                                form.user=request.user
+                                form.save()
+                                return redirect('view_question' ,id=ques.id)
+
+
+class all_question(View):
+        def __init__(self):
+                self.template_name='doubt/question.html'
+        def get(self,request):
+                question=Question.objects.all()
                 context={'question':question}
-                return render(request,template_name,context)
+                return render(request,self.template_name,context)
 
 def view_question(request,id):
         question=get_object_or_404(Question,id=id)
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
                 if request.method=='POST':
                         form=ReplyForm(request.POST)
                         form=form.save(commit=False)
@@ -40,22 +57,20 @@ def view_question(request,id):
                         question.save()
         form=ReplyForm()
         context={'question':question,'form':form}
-        return render(request,'doubt/question.html',context)
+        return render(request,'doubt/question_view.html',context)
 
 class Register(View):
-        
+        def __init__(self):
+                self.template_name='register/register.html'
         def get(self,request):
-                template_name='register/register.html'
                 form=UserCreationForm()
                 profile_form=ProfileForm()
                 context={'form':form,'profile_form':profile_form}
-                return render(request,template_name,context)
+                return render(request,self.template_name,context)
         def post(self,request):
-                template_name='register/register.html'
                 form=UserCreationForm(request.POST)
                 profile=ProfileForm(request.POST,request.FILES)
                 if form.is_valid():
-                        #profile_form=profile_form.save(commit=False)
                         username=form.cleaned_data['username']
                         password=form.cleaned_data['password1']
                         form=form.save(commit=False)
@@ -74,19 +89,20 @@ class Register(View):
                         return redirect('register')
 
 class ViewProfile(View):
-        
+        def __init__(self):
+                self.template_name='login/profile.html'
         def get(self,request):
-                template_name='login/profile.html'
                 profile=request.user.user_profile
                 context={'profile':profile}
-                return render(request,template_name,context)
+                return render(request,self.template_name,context)
 
 class EditProfile(View):
-        template_name='login/editprofile.html'
+        def __init__(self):
+                self.template_name='login/editprofile.html'
         def get(self,request):
                 form=ProfileForm(instance=request.user.user_profile)
                 context={'form':form}
-                return render(request,template_name,context)
+                return render(request,self.template_name,context)
         def post(self,request):
                 form=ProfileForm(request.POST,instance=request.user.user_profile)
                 if form.is_valid():
