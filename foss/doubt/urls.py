@@ -3,6 +3,7 @@ from . import views
 from django.contrib.auth.views import LoginView
 urlpatterns = [
     path('',views.index,name='index'),
+    path('social/',include('social_django.urls', namespace='social')),
     path('ask/',views.ask_question.as_view(),name='ask_question'),
     path('login/',LoginView.as_view(template_name='login/login.html'),name='login'),
     path('logout/',views.log_me_out,name='logout'),

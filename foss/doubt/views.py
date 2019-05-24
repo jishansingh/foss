@@ -6,8 +6,9 @@ from django.views.generic import TemplateView
 from .forms import ReplyForm,ProfileForm,AskQuestion
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
-
+import social_django
 # Create your views here.
+
 def index(request):
         pass
 
@@ -92,7 +93,8 @@ class ViewProfile(View):
         def __init__(self):
                 self.template_name='login/profile.html'
         def get(self,request):
-                profile=request.user.user_profile
+                print(social_django.models.UserSocialAuth.get_username(request.user))
+                profile=social_django.models.USER_MODEL
                 context={'profile':profile}
                 return render(request,self.template_name,context)
 
