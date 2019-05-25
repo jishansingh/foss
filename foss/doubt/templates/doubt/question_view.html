@@ -54,7 +54,7 @@
                     <div class="">
                     <div class="container-login100" >
                         <div class="">
-                            <form class="login100-form validate-form" action="{% url 'register' %}" method="post" enctype=multipart/form-data style="width:100%">
+                            <form class="login100-form validate-form" action="{% url 'view_question' question.id %}" method="post" enctype=multipart/form-data style="width:100%">
                             {% csrf_token %}
                                 <span class="login100-form-title p-b-49" style="color:white">
                                     REPLY
@@ -119,21 +119,3 @@
 
 
 
-
-<html>
-<head>
-</head>
-<body>
-
-<h1>{{question.question}}</h1>
-<h2>{{question.content}}</h2>
-{% for quest in question.reply.all %}
-    <h1><a href="#">{{quest.content}}</a></h1>
-{% endfor %}
-<form method="post" action="{% url 'view_question' question.id %}">
-{% csrf_token %}
-{{form}}
-<input type="submit" value="reply">
-</form>
-</body>
-</html>

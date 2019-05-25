@@ -145,7 +145,7 @@ def search(request):
 def liked_questions(request):
         if request.user.is_authenticated:
                 question=request.user.user_profile.liked.all()
-                context={'question':new,'category':CHOICE}
+                context={'question':question,'category':CHOICE}
                 return render(request,'doubt/question.html',context)
         else:
                 raise Http404
