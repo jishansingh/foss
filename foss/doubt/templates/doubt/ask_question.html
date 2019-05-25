@@ -1,11 +1,36 @@
-<html>
-<head>
-</head>
-<body>
-<form method="post" action="{% url 'ask_question' %}" >
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="ask">
-</form>
-</body>
-</html>
+{% extends 'login/base.html' %}
+{% block new %}
+	
+	<div class="limiter">
+		<div class="container-login100" >
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				<form class="login100-form validate-form" action="{% url 'register' %}" method="post" enctype=multipart/form-data style="width:100%">
+				{% csrf_token %}
+					<span class="login100-form-title p-b-49">
+						ASK QUESTION
+					</span>
+					{% for field in form %}
+					<div class="wrap-input100 validate-input m-b-23" data-validate = "field is required">
+						<span class="label-input100">{{field.label_tag}}</span><br>
+						{{field}}
+						{% cycle '<span class="focus-input100" data-symbol="&#xf206;"></span>' '<span class="focus-input100" data-symbol="&#xf190;"></span>'%}
+					</div>
+                    {% endfor %}			
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button class="login100-form-btn" type="submit">
+								ASK
+							</button>
+						</div>
+					</div>
+
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div id="dropDownSelect1"></div>
+
+{% endblock %}

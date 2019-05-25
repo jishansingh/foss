@@ -1,7 +1,130 @@
+{% extends 'login/base.html' %}
+{% block new %}
+	<!-- Page top section -->
+    {% load staticfiles %}
+	<section class="page-top-section set-bg" data-setbg="{% static 'doubt/img/page-top-bg/1.jpg' %}">
+		<div class="page-info">
+			<h2>Games</h2>
+			<div class="site-breadcrumb">
+				<a href="">Home</a>  /
+				<span>Games</span>
+			</div>
+		</div>
+	</section>
+	<!-- Page top end-->
+	<!-- Games section -->
+	<section class="games-single-page">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-9 col-lg-8 col-md-7 game-single-content">
+					<div class="gs-meta"><a href="">DOUBTS</a></div>
+					<h2 class="gs-title">{{question.question}}</h2>
+					<h4>Content</h4>
+					<p>{{question.content}}</p>
+                    {% for some in question.reply.all %}
+                    <section class="game-author-section">
+                        <div class="container">
+                            {% if some.anonymous %}
+                            {% load staticfiles %}
+                                <div class="game-author-pic set-bg" data-setbg="{{some.user.user_profile.photo.url}}"></div>
+                                <div class="game-author-info">
+                                <h4>Written by: Anonymous</h4>
+                            {% else %}
+                            {% load staticfiles %}
+                                <div class="game-author-pic set-bg" data-setbg="{% static 'login/images/bg-01.jpg' %}"></div>
+                                <div class="game-author-info">
+                                <h4>Written by: {{some.user.username}}</h4>
+                            {% endif %}
+                                
+                            <p>{{some.content}}</p>
+                            </div>
+                        </div>
+                    </section>
+                        <h5>{{some.user.username }}</h5>
+                        <p></p>
+                    {% endfor %}
+					<div class="geme-social-share pt-5 d-flex">
+						<p>Share:</p>
+						<a href="#"><i class="fa fa-pinterest"></i></a>
+						<a href="#"><i class="fa fa-facebook"></i></a>
+						<a href="#"><i class="fa fa-twitter"></i></a>
+						<a href="#"><i class="fa fa-dribbble"></i></a>
+						<a href="#"><i class="fa fa-behance"></i></a>
+					</div>
+                    <div class="">
+                    <div class="container-login100" >
+                        <div class="">
+                            <form class="login100-form validate-form" action="{% url 'register' %}" method="post" enctype=multipart/form-data style="width:100%">
+                            {% csrf_token %}
+                                <span class="login100-form-title p-b-49" style="color:white">
+                                    REPLY
+                                </span>
+                                {% for field in form %}
+                                <div class="wrap-input100 validate-input m-b-23" data-validate = "field is required">
+                                    <span class="label-input100" style="color:white">{{field.label_tag}}</span><br>
+                                    {{field}}
+                                    {% cycle '<span class="focus-input100" data-symbol="&#xf206;"></span>' '<span class="glyphicon glyphicon-ok"></span>'%}
+                                </div>
+                                {% endfor %}			
+                                <div class="container-login100-form-btn">
+                                    <div class="wrap-login100-form-btn">
+                                        <div class="login100-form-bgbtn"></div>
+                                        <button class="login100-form-btn" type="submit">
+                                            REPLY
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
+					<div id="stickySidebar">
+						<div class="widget-item">
+							<div class="rating-widget">
+								<h4 class="widget-title">Ratings</h4>
+								<ul>
+									<li>Visited<span>{{question.visited.all.count}}</span></li>
+									<li>Category<span>3{{question.category}}</span></li>
+								</ul>
+								<div class="rating">
+									<h5><i>Likes</i><span>{{question.likes}}</span></h5>
+								</div>
+							</div>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    
+	<!-- Games end-->
+    <section class="game-author-section">
+		<div class="container">
+			<div class="game-author-pic set-bg" data-setbg="{{question.user.user_profile.photo.url}}"></div>
+			<div class="game-author-info">
+				<h4>Written by: {{question.user.username}}</h4>
+            </div>
+		</div>
+	</section>
+	
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
 <html>
 <head>
 </head>
 <body>
+
 <h1>{{question.question}}</h1>
 <h2>{{question.content}}</h2>
 {% for quest in question.reply.all %}

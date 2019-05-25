@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,get_list_or_404
 from .models import Question,Reply,UserProfile
 from .forms import ReplyForm
 from django.views import View
@@ -7,14 +7,23 @@ from .forms import ReplyForm,ProfileForm,AskQuestion
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
 import social_django
+from .choices import CHOICE
+from django.http import Http404
 # Create your views here.
 
 def index(request):
-        pass
+        category=[]
+        for some in CHOICE:
+                category.append(some)
+        question=Question.objects.all().order_by('-visited')
+        context={'question':question,'category':category}
+        return render(request,'doubt/index.html',context)
 
 def my_question(request):
-        if request.user.is_authenticated():
-                context={'question':request.user.user_profile.my_questions}
+        if request.user.is_authenticated:
+                question=request.user.user_profile.my_question.all()
+                print(question)
+                context={'question':question,'category':CHOICE}
                 return render(request,'doubt/my_question.html',context)
         else:
                 return redirect('login')
@@ -34,6 +43,10 @@ class ask_question(View):
                                 ques=form
                                 form.user=request.user
                                 form.save()
+                                profile=request.user.user_profile
+                                new=profile.my_question
+                                new.add(ques)
+                                profile.save()
                                 return redirect('view_question' ,id=ques.id)
 
 
@@ -42,7 +55,7 @@ class all_question(View):
                 self.template_name='doubt/question.html'
         def get(self,request):
                 question=Question.objects.all()
-                context={'question':question}
+                context={'question':question,'category':CHOICE}
                 return render(request,self.template_name,context)
 
 def view_question(request,id):
@@ -57,7 +70,7 @@ def view_question(request,id):
                         rep.add(form)
                         question.save()
         form=ReplyForm()
-        context={'question':question,'form':form}
+        context={'question':question,'form':form,'category':CHOICE}
         return render(request,'doubt/question_view.html',context)
 
 class Register(View):
@@ -93,8 +106,8 @@ class ViewProfile(View):
         def __init__(self):
                 self.template_name='login/profile.html'
         def get(self,request):
-                print(social_django.models.UserSocialAuth.get_username(request.user))
-                profile=social_django.models.USER_MODEL
+                print(social_django.models.UserSocialAuth)
+                profile=request.user.user_profile
                 context={'profile':profile}
                 return render(request,self.template_name,context)
 
@@ -110,8 +123,32 @@ class EditProfile(View):
                 if form.is_valid():
                         form.save()
                         return redirect('edit_profile')
+def filter(request,slug):
+        question=Question.objects.filter(category=slug).order_by('-visited')
+        context={'question':question,'category':CHOICE}
+        return render(request,'doubt/index.html',context)
 
-
+def search(request):
+        slug=(request.GET.get('slug'))
+        lis=list(slug)
+        ans=[]
+        for some in lis:
+                question=Question.objects.filter(question__icontains=some).order_by('-visited')
+                ans+=question
+        new=[]
+        for some in ans:
+                if some not in new:
+                        new.append(some)
+        print(new)
+        context={'question':new,'category':CHOICE}
+        return render(request,'doubt/question.html',context)
+def liked_questions(request):
+        if request.user.is_authenticated:
+                question=request.user.user_profile.liked.all()
+                context={'question':new,'category':CHOICE}
+                return render(request,'doubt/question.html',context)
+        else:
+                raise Http404
 
 
 

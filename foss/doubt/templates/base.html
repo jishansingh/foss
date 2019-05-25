@@ -1,0 +1,122 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Favicon -->
+	
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+	<!-- Stylesheets -->
+	{% load staticfiles %}
+	<link href="{% static 'login/images/icons/favicon.ico' %}" rel="shortcut icon"/>
+	<link rel="stylesheet" href="{% static 'doubt/css/bootstrap.min.css' %}" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'doubt/css/slicknav.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'doubt/css/owl.carousel.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'doubt/css/magnific-popup.css' %}" />
+	<link rel="stylesheet" href="{% static 'doubt/css/animate.css' %}" />
+	<link rel="stylesheet" href="{% static 'doubt/css/style.css' %}" />
+	<!-- Main Stylesheets -->
+</head>
+<body>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+	<!-- Header section -->
+	<header class="header-section">
+		<div class="header-warp">
+			<div class="header-social d-flex justify-content-end">
+				<p>Follow us:</p>
+				<a href="#"><i class="fa fa-pinterest"></i></a>
+				<a href="#"><i class="fa fa-facebook"></i></a>
+				<a href="#"><i class="fa fa-twitter"></i></a>
+				<a href="#"><i class="fa fa-dribbble"></i></a>
+				<a href="#"><i class="fa fa-behance"></i></a>
+			</div>
+			<div class="header-bar-warp d-flex">
+				<!-- site logo -->
+				<a href="#" class="site-logo">
+				{% load staticfiles %}
+					<img src="{% static 'doubt/img/logo.png' %}" alt="">
+				</a>
+				<nav class="top-nav-area w-100">
+				{% if not  user.is_authenticated %}
+					<div class="user-panel">
+						<a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a>
+					</div>
+				{% else %}
+                    <div class="user-panel">
+						<a href="{% url 'view_profile' %}">Profile</a> / <a href="{% url 'edit_profile' %}">Edit</a>
+					</div>
+				{% endif %}
+					<!-- Menu -->
+					<ul class="main-menu primary-menu">
+                        <li><a href="{% url 'ask_question' %}">ask Question</a></li>
+                        <li><a href="{% url 'my_question' %}">My question</a></li>
+                        <li><a href="{% url 'liked_questions' %}">Liked Questions</a></li>
+						<li><a href="#">contributors</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<!-- Header section end -->
+	{% block body %}
+	{% endblock %}
+	<!-- Newsletter section -->
+	<section class="newsletter-section">
+		<div class="container">
+			<h2>Whats On your Mind</h2>
+			<form class="newsletter-form" action="{% url 'search' %}" method="GET">
+			
+				<input type="text" placeholder="search" name="slug">
+				<button class="site-btn">Search 
+				{% load staticfiles %}
+				<img src="{% static 'doubt/icons/double-arrow.png' %}" alt="#"/>
+				</button>
+			</form>
+		</div>
+	</section>
+	<!-- Newsletter section end -->
+
+
+	<!-- Footer section -->
+	<footer class="footer-section">
+		<div class="container">
+			<a href="#" class="footer-logo">
+			{% load static %}
+				<img src="{% static 'doubt/img/logo.png' %}" alt="">
+			</a>
+			<ul class="main-menu footer-menu">
+				<li><a href="">Home</a></li>
+				<li><a href="">Games</a></li>
+				<li><a href="">Reviews</a></li>
+				<li><a href="">News</a></li>
+				<li><a href="">Contact</a></li>
+			</ul>
+			<div class="footer-social d-flex justify-content-center">
+				<a href="#"><i class="fa fa-pinterest"></i></a>
+				<a href="#"><i class="fa fa-facebook"></i></a>
+				<a href="#"><i class="fa fa-twitter"></i></a>
+				<a href="#"><i class="fa fa-dribbble"></i></a>
+				<a href="#"><i class="fa fa-behance"></i></a>
+			</div>
+			<div class="copyright"><a href="">colorlib</a> 2018 @ All rights reserved</div>
+		</div>
+	</footer>
+	<!-- Footer section end -->
+	{% load staticfiles %}
+
+	<!--====== Javascripts & Jquery ======-->
+	<script src="{% static 'doubt/js/jquery-3.2.1.min.js' %} "></script>
+	<script src="{% static 'doubt/js/bootstrap.min.js' %} "></script>
+	<script src="{% static 'doubt/js/jquery.slicknav.min.js' %} "></script>
+	<script src="{% static 'doubt/js/owl.carousel.min.js' %} "></script>
+	<script src="{% static 'doubt/js/jquery.sticky-sidebar.min.js' %} "></script>
+	<script src="{% static 'doubt/js/jquery.magnific-popup.min.js' %} "></script>
+	<script src="{% static 'doubt/js/main.js' %} "></script>
+
+	</body>
+</html>
