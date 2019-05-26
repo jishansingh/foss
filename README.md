@@ -18,3 +18,14 @@ python3 manage.py runserver
 project is simple portal for question and answer any user can ask question & reply and also search for asked question
 also website stores data for liked question viewed question disliked question
 
+## Progress
+login,register,Q&A portal are working  <br />
+filters acccording to category are working <br />
+search can be done profile can be edited
+
+## issues
+profile page is left<br />
+no like or dislike button <br />
+question is not added to viewed question in models <br />
+some css is to be fixed
+
