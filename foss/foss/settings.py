@@ -140,3 +140,4 @@ LOGOUT_URL = '/logout/'
 AUTH_PROFILE_MODULE='doubt.UserProfile'
 #AUTH_USER_MODEL='social_django.models.user'
 
+

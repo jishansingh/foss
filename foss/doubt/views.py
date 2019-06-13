@@ -9,6 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 import social_django
 from .choices import CHOICE
 from django.http import Http404
+
 # Create your views here.
 
 def index(request):
@@ -60,7 +61,11 @@ class all_question(View):
 
 def view_question(request,id):
         question=get_object_or_404(Question,id=id)
+        visit=question.visited
         if request.user.is_authenticated:
+                if request.user not in visit.all():
+                        visit.add(request.user)
+                        question.save()
                 if request.method=='POST':
                         form=ReplyForm(request.POST)
                         form=form.save(commit=False)
@@ -130,10 +135,12 @@ def filter(request,slug):
 
 def search(request):
         slug=(request.GET.get('slug'))
-        lis=list(slug)
+        lis=slug.split(" ")
         ans=[]
         for some in lis:
                 question=Question.objects.filter(question__icontains=some).order_by('-visited')
+                ans+=question
+                question=Question.objects.filter(content__icontains=some).order_by('-visited')
                 ans+=question
         new=[]
         for some in ans:

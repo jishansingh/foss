@@ -20,7 +20,20 @@
 					<div class="gs-meta"><a href="">DOUBTS</a></div>
 					<h2 class="gs-title">{{question.question}}</h2>
 					<h4>Content</h4>
-					<p>{{question.content}}</p>
+					{% load tags %}
+					{% with see=question.content|split_tags %}
+					<p>
+					{% for some in see %}
+						{% for one ,two in some.items %}
+							{% if two %}
+								{{one|safe}}
+							{% else %}
+								{{one}}
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+					</p>
+					{% endwith %}
                     {% for some in question.reply.all %}
                     <section class="game-author-section">
                         <div class="container">
