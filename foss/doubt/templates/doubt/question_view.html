@@ -1,5 +1,66 @@
 {% extends 'login/base.html' %}
 {% block new %}
+<style>
+.like-content {
+    display: inline-block;
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+}
+.like-content .btn-secondary {
+	  display: block;
+	  margin: 40px auto 0px;
+    text-align: center;
+    background: #ed2553;
+    border-radius: 3px;
+    box-shadow: 0 10px 20px -8px rgb(240, 75, 113);
+    padding: 10px 17px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+}
+.like-content .btn-secondary:hover {
+	  transform: translateY(-3px);
+}
+.like-content .btn-secondary .fa {
+	  margin-right: 5px;
+}
+.animate-like {
+	animation-name: likeAnimation;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+	animation-duration: 0.65s;
+}
+@keyframes likeAnimation {
+  0%   { transform: scale(30); }
+  100% { transform: scale(1); }
+}
+</style>
+<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script type="text/javascript">
+function submitForm(form, successFn){
+    if (form.getAttribute("id")!='' || form.getAttribute("id")!=null){
+        var id = form.getAttribute("id");
+    } else {
+        console.log("Form id attribute was not set; the form cannot be serialized");
+    }
+
+    $.ajax({
+        type: form.method,
+        url: form.action,
+        data: $(id).serializeArray(),
+        dataType: "json",
+        success: successFn,
+        //error: errorFn(data)
+    });
+}
+var formElement = document.getElementById("myForm");
+formElement.submit()
+</script>
 	<!-- Page top section -->
     {% load staticfiles %}
 	<section class="page-top-section set-bg" data-setbg="{% static 'doubt/img/page-top-bg/1.jpg' %}">
@@ -34,28 +95,53 @@
 					{% endfor %}
 					</p>
 					{% endwith %}
-                    {% for some in question.reply.all %}
-                    <section class="game-author-section">
-                        <div class="container">
-                            {% if some.anonymous %}
+					<form method="post" id="myForm" action="/" onsubmit="document.getElementById('myForm').submit()">
+					{% csrf_token %}
+						<div class="like-content">
+						<button class="btn-secondary like-review">
+							<i class="fa fa-heart" aria-hidden="true"></i> Like
+						</button>
+					</form>
+					</div>
+				</div>
+
+				<div class="col-xl-3 col-lg-5 col-md-5 sidebar game-page-sideber">
+					<div id="stickySidebar">
+						<div class="widget-item">
+							<div class="rating-widget">
+								<h4 class="widget-title">Ratings</h4>
+								<ul>
+									<li>Visited<span>{{question.visited.all.count}}</span></li>
+									<li>Category<span>{{question.category}}</span></li>
+								</ul>
+								<div class="rating">
+									<h5><i>Likes</i><span>{{question.likes}}</span></h5>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                {% for some in question.reply.all %}
+                <section class="game-author-section">
+                    <div class="container">
+                        {% if some.anonymous %}
                             {% load staticfiles %}
-                                <div class="game-author-pic set-bg" data-setbg="{{some.user.user_profile.photo.url}}"></div>
+                                <div class="game-author-pic set-bg" data-setbg="{% static 'login/images/bg-01.jpg' %}"></div>
                                 <div class="game-author-info">
                                 <h4>Written by: Anonymous</h4>
                             {% else %}
                             {% load staticfiles %}
-                                <div class="game-author-pic set-bg" data-setbg="{% static 'login/images/bg-01.jpg' %}"></div>
+                                <div class="game-author-pic set-bg" data-setbg="{{some.user.user_profile.photo.url}}"></div>
                                 <div class="game-author-info">
                                 <h4>Written by: {{some.user.username}}</h4>
                             {% endif %}
                                 
                             <p>{{some.content}}</p>
-                            </div>
-                        </div>
-                    </section>
-                        <h5>{{some.user.username }}</h5>
-                        <p></p>
-                    {% endfor %}
+                    </div>
+                </section>
+				<h5>{{some.user.username }}</h5>
+                <p></p>
+                {% endfor %}
 					<div class="geme-social-share pt-5 d-flex">
 						<p>Share:</p>
 						<a href="#"><i class="fa fa-pinterest"></i></a>
@@ -91,22 +177,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-4 col-md-5 sidebar game-page-sideber">
-					<div id="stickySidebar">
-						<div class="widget-item">
-							<div class="rating-widget">
-								<h4 class="widget-title">Ratings</h4>
-								<ul>
-									<li>Visited<span>{{question.visited.all.count}}</span></li>
-									<li>Category<span>3{{question.category}}</span></li>
-								</ul>
-								<div class="rating">
-									<h5><i>Likes</i><span>{{question.likes}}</span></h5>
-								</div>
-							</div>
-					</div>
-				</div>
-				</div>
+                </div>
 			</div>
 		</div>
 	</section>
@@ -120,15 +191,6 @@
             </div>
 		</div>
 	</section>
-	
 
 
 {% endblock %}
-
-
-
-
-
-
-
-

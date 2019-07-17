@@ -49,6 +49,8 @@ class ask_question(View):
                                 new.add(ques)
                                 profile.save()
                                 return redirect('view_question' ,id=ques.id)
+                else:
+                        return redirect('login')
 
 
 class all_question(View):
@@ -68,12 +70,13 @@ def view_question(request,id):
                         question.save()
                 if request.method=='POST':
                         form=ReplyForm(request.POST)
-                        form=form.save(commit=False)
-                        form.user=request.user
-                        form.save()
-                        rep=question.reply
-                        rep.add(form)
-                        question.save()
+                        if form.is_valid():
+                                form=form.save(commit=False)
+                                form.user=request.user
+                                form.save()
+                                rep=question.reply
+                                rep.add(form)
+                                question.save()
         form=ReplyForm()
         context={'question':question,'form':form,'category':CHOICE}
         return render(request,'doubt/question_view.html',context)
@@ -156,7 +159,19 @@ def liked_questions(request):
                 return render(request,'doubt/question.html',context)
         else:
                 raise Http404
-
+def like_question(request,id):
+        if request.method=='POST':
+                question=get_object_or_404(Question,id=id)
+                liked = request.user.user_profile.liked
+                if question not in liked.all():
+                        question.likes+=1
+                        liked.add(question)
+                else:
+                        liked.remove(question)
+                liked.save()
+                question.save()
+        else:
+                raise Http404
 
 
 

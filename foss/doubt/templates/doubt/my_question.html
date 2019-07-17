@@ -5,18 +5,18 @@
         <br><br>
 			<div class="row">
         {% for quest in question %}
-				<div class="col-md-4">
-					
-					<div class="intro-text-box text-box text-white">
-						<a href="{% url 'view_question' quest.id %}">
-						<div class="top-meta">{{quest.category}}</div>
-						<h3>{{quest.question}}</h3>
-						<p>{{quest.content |truncatechars:25}}...</p>
-						<a href="#" class="read-more">Read More  {% load staticfiles %}<img src="{% static 'doubt/icons/double-arrow.png' %}" alt="#"/></a>
-					</div>
+					<div class="col-md-4" >
+					<div style="padding-bottom:15px;">
+					<a href="{% url 'filter' quest.category %}"><div class="top-meta">{{quest.category}}</div></a>
+					<a href="{% url 'view_question' id=quest.id %}">
+						<div class="intro-text-box text-box text-white">
+							<h3>{{quest.question}}</h3>
+							<p>{{quest.content |truncatechars:25}}...</p>
+							<a href="{% url 'view_question' id=quest.id %}" class="read-more">Read More  {% load staticfiles %}<img src="{% static 'doubt/icons/double-arrow.png' %}" alt="#"/></a>
+						</div>
 					</a>
-				</div>
-				
+					</div>
+					</div>
         {% endfor %}
 			</div>
 		</div>

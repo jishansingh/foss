@@ -13,7 +13,7 @@ def split_tags(value):
         print(some)
         for one in ans:
                 er=False
-                if one in some:
+                if one in some and 'script' not in one:
                         er=True
                 pink={one:er}
                 total.append(pink)

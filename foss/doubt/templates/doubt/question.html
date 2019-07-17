@@ -1,20 +1,22 @@
 {% extends 'base.html' %}
 {% block body %}
-<br><br>
 <section class="intro-section">
 		<div class="container">
+        <br><br>
 			<div class="row">
         {% for quest in question %}
-				<div class="col-md-4">
+					<div class="col-md-4" >
+					<div style="padding-bottom:15px;">
+					<a href="{% url 'filter' quest.category %}"><div class="top-meta">{{quest.category}}</div></a>
 					<a href="{% url 'view_question' id=quest.id %}">
-					<div class="intro-text-box text-box text-white">
-						<div class="top-meta">{{quest.category}}</div>
-						<h3>{{quest.question}}</h3>
-						<p>{{quest.content |truncatechars:25}}...</p>
-						<div class="read-more">Read More  {% load staticfiles %}<img src="{% static 'doubt/icons/double-arrow.png' %}" alt="#"/></div>
+						<div class="intro-text-box text-box text-white">
+							<h3>{{quest.question}}</h3>
+							<p>{{quest.content |truncatechars:25}}...</p>
+							<a href="{% url 'view_question' id=quest.id %}" class="read-more">Read More  {% load staticfiles %}<img src="{% static 'doubt/icons/double-arrow.png' %}" alt="#"/></a>
+						</div>
+					</a>
 					</div>
-				</div>
-				</a>
+					</div>
         {% endfor %}
 			</div>
 		</div>
