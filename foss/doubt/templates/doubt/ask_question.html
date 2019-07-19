@@ -1,21 +1,96 @@
 {% extends 'login/base.html' %}
 {% block new %}
-	
+<style>
+.editor-toolbar{
+	width:100%;
+}
+ /* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.tabcontent {
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+#london{
+	width:25%;
+	height:52px;
+}
+.form-control{
+  padding:0.5rem 0.75rem;
+}
+</style>
+
+
 	<div class="limiter">
 		<div class="container-login100" >
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
 				<form class="login100-form validate-form" action="{% url 'ask_question' %}" method="post" enctype=multipart/form-data style="width:100%">
 				{% csrf_token %}
+				<br><br><br><br>
 					<span class="login100-form-title p-b-49">
 						ASK QUESTION
 					</span>
-					{% for field in form %}
-					<div class="wrap-input100 validate-input m-b-23" data-validate = "field is required">
-						<span class="label-input100">{{field.label_tag}}</span><br>
-						{{field}}
-						{% cycle '<span class="focus-input100" data-symbol="&#xf206;"></span>' '<span class="focus-input100" data-symbol="&#xf190;"></span>'%}
+          <div class="wrap-input100 validate-input m-b-23" data-validate = "field is required">
+					<span class="focus-input100 "><i class="fa fa-book fa-2x" aria-hidden="true" ></i></span>
+					{{form.question}}
+          </div>
+					<div class="tab" >
+					  <button id="medium" class="tablinks" onclick="openCity(event, 'London')"><div class="editor-toolbar"><a title="Bold (Ctrl-B)" tabindex="-1" class="fa fa-bold" onClick="getSel('b')"></a>&nbsp&nbsp&nbsp<a title="Italic (Ctrl-I)" tabindex="-1" class="fa fa-italic" onClick="getSel('i')"></a>&nbsp&nbsp&nbsp<a title="Toggle Preview (Ctrl-P)" tabindex="-1" class="fa fa-eye no-disable"></a>&nbsp&nbsp&nbsp</div></button>
+					  <button class="tablinks" onclick="openCity(event, 'Paris');showForm()" ><a title="Toggle Fullscreen (F11)" tabindex="-1" class="fa fa-arrows-alt no-disable no-mobile"></a></button>
 					</div>
-                    {% endfor %}			
+
+					<div id="London" class="tabcontent">
+            <span class="label-input100">Content</span><br>
+            <div class="wrap-input100 validate-input m-b-23" data-validate = "field is required">		
+              
+            <span class="focus-input100" style="padding-top:25%;"><i class="fa fa-paragraph" aria-hidden="true"></i></span>
+            {{form.content}}
+					</div>
+          </div>
+          <div id="Paris" class="tabcontent">
+           	<p >no preview</p>
+					</div>
+					Category:<br>
+					{{form.category}}
+          <br>
+          <br>
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
@@ -24,7 +99,7 @@
 							</button>
 						</div>
 					</div>
-
+					</div>
 					
 				</form>
 			</div>
@@ -32,5 +107,57 @@
 	</div>
 	
 	<div id="dropDownSelect1"></div>
+<script>
+function getSel(st) // javascript
+{
+console.log("test");
 
+    // obtain the object reference for the textarea>
+    var txtarea = document.querySelector('.form-control');
+    // obtain the index of the first selected character
+    var start = txtarea.selectionStart;
+    // obtain the index of the last selected character
+    var finish = txtarea.selectionEnd;
+    //obtain all Text
+    var allText = txtarea.value;
+
+    // obtain the selected text
+    var sel = allText.substring(start, finish);
+    //append te text;
+    var newText=allText.substring(0, start)+"*<"+st+">*"+sel+"*</"+st+">*"+allText.substring(finish, allText.length);
+
+    console.log(newText);
+
+    txtarea.value=newText;
+}
+function showForm(){
+	val=document.querySelector('.form-control')
+	
+	ne=document.querySelector('#Paris')
+	ne.innerHTML=val.value.replace(/\*/g, "");
+}
+function openCity(evt, cityName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+med=document.getElementById('medium');
+med.click();
+</script>
 {% endblock %}

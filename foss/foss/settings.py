@@ -26,9 +26,9 @@ SECRET_KEY = '%2=vgt&tl!su_5vh=3%_!9uerjc7xo5%c@9c!h_=a^daa18j4r'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='831190499326-322ej4ndun4ui667195fb15ru77mmhvc.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='831190499326-hda4cmlbe1v8n9k5fj76agpdff6bo01r.apps.googleusercontent.com'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='ww1Z8AkUa-v8fZX0CjjWFrZs'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='Dk3afbGedF_6ksn7w5Suc5Fu'
 
 
 
@@ -140,4 +140,14 @@ LOGOUT_URL = '/logout/'
 AUTH_PROFILE_MODULE='doubt.UserProfile'
 #AUTH_USER_MODEL='social_django.models.user'
 
-
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'social_core.pipeline.social_auth.associate_by_email',
+)

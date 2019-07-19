@@ -41,26 +41,8 @@
 }
 </style>
 <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-<script type="text/javascript">
-function submitForm(form, successFn){
-    if (form.getAttribute("id")!='' || form.getAttribute("id")!=null){
-        var id = form.getAttribute("id");
-    } else {
-        console.log("Form id attribute was not set; the form cannot be serialized");
-    }
 
-    $.ajax({
-        type: form.method,
-        url: form.action,
-        data: $(id).serializeArray(),
-        dataType: "json",
-        success: successFn,
-        //error: errorFn(data)
-    });
-}
-var formElement = document.getElementById("myForm");
-formElement.submit()
-</script>
+
 	<!-- Page top section -->
     {% load staticfiles %}
 	<section class="page-top-section set-bg" data-setbg="{% static 'doubt/img/page-top-bg/1.jpg' %}">
@@ -81,9 +63,10 @@ formElement.submit()
 					<div class="gs-meta"><a href="">DOUBTS</a></div>
 					<h2 class="gs-title">{{question.question}}</h2>
 					<h4>Content</h4>
+					<br>
 					{% load tags %}
 					{% with see=question.content|split_tags %}
-					<p>
+					<div style='color:white'>
 					{% for some in see %}
 						{% for one ,two in some.items %}
 							{% if two %}
@@ -93,17 +76,19 @@ formElement.submit()
 							{% endif %}
 						{% endfor %}
 					{% endfor %}
-					</p>
+					</div>
 					{% endwith %}
-					<form method="post" id="myForm" action="/" onsubmit="document.getElementById('myForm').submit()">
-					{% csrf_token %}
+					
+					<form method="post" id="myForm" action="{% url 'like_question' question.id %}">
+						{% csrf_token %}
 						<div class="like-content">
-						<button class="btn-secondary like-review">
+						<button class="btn-secondary like-review" type="submit">
 							<i class="fa fa-heart" aria-hidden="true"></i> Like
 						</button>
+						</div>
 					</form>
-					</div>
 				</div>
+				<div class="control">
 
 				<div class="col-xl-3 col-lg-5 col-md-5 sidebar game-page-sideber">
 					<div id="stickySidebar">

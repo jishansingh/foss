@@ -8,6 +8,7 @@ urlpatterns = [
     path('social/',include('social_django.urls', namespace='social')),
     path('filter/<str:slug>/',views.filter,name='filter'),
     path('ask/',views.ask_question.as_view(),name='ask_question'),
+    path('like/<id>/',views.like_question,name='like_question'),
     path('login/',LoginView.as_view(template_name='login/login.html'),name='login'),
     path('logout/',views.log_me_out,name='logout'),
     path('my-ques/',views.my_question,name='my_question'),

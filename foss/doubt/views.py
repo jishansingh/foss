@@ -114,7 +114,7 @@ class ViewProfile(View):
         def __init__(self):
                 self.template_name='login/profile.html'
         def get(self,request):
-                print(social_django.models.UserSocialAuth)
+                print(request.user.social_auth.get(provider='google-oauth2'))
                 profile=request.user.user_profile
                 context={'profile':profile}
                 return render(request,self.template_name,context)
@@ -162,14 +162,20 @@ def liked_questions(request):
 def like_question(request,id):
         if request.method=='POST':
                 question=get_object_or_404(Question,id=id)
-                liked = request.user.user_profile.liked
-                if question not in liked.all():
-                        question.likes+=1
-                        liked.add(question)
-                else:
-                        liked.remove(question)
-                liked.save()
-                question.save()
+                user=request.user
+                if user:
+                        profile = user.user_profile
+                        liked=profile.liked
+                        print(liked.all())
+                        if question not in liked.all():
+                                question.likes+=1
+                                liked.add(question)
+                        else:
+                                question.likes-=1
+                                liked.remove(question)
+                        profile.save()
+                        question.save()
+                return redirect('view_question',id=id)
         else:
                 raise Http404
 
